@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding the best group!</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .page-content {padding: 10px 200px;}
+    </style>
+
+    <script>
+        // fetch('deine_csv_datei.csv')
+        // .then(response => response.text())
+        // .then(data => {
+        //     const rows = data.split('\n');
+        //     const arrays = rows.map(row => row.split(','));
+
+        //     var testlabel = []
+        //     for (var i = 0; i < 3; i++){
+        //         var array = arrays[0]
+        //         testlabel.push(array[i])
+        //     }
+        // });
+
+
+        var alias = ['ramranch', 'Caterpillar Fungus', 'tjsol', 'Rookie9', 'matcha', 'Flower', 'kapybara',
+                    'Bebocchia', 'stellarise', 'Kakka', 'Beowulf', 'BirdMaster', 'SargeSmoke', 'Weissach',
+                    'Croco', 'w', 'kattmat', 'tofu', 'gallopinto', 'numpy', 'Kanelbulle', 'sackboy',
+                    'blackcat', 'Shadowheart', 'tpain', 'ghostcat', 'cyan', 'BlenderBender', 'Windy65',
+                    'Bond, Jan Bond', 'MGH552200', 'John Wick', 'YellowShyGuy', 'Sam Vimes', 'Frieren',
+                    'DiscoTechLola', 'Aaron', 'GGer', 'Reisen', 'DrPavel', 'SannyKuro', 'Mintchoco', 'Ty29']
+        
+        var viz = [3,3,5,5,3,3,4,8,6,1,6,4,7,3,6,6,4,3,3,5,3,1,6,2,3,6,1,6,2,3,7,3,3,3,7,2,6,3,3,4,5,5,6]
+        var stats = [2,2,3,5,3,3,3,6,6,3,3,6,5,3,6,6,3,2,5,9,5,1,5,1,5,5,8,2,8,3,5,3,7,3,6,2,6,9,5,4,5,6,4]
+        var math = [3,2,3,6,6,3,7,8,4,5,3,6,5,6,6,5,3,5,5,6,9,6,5,3,4,5,5,3,7,6,6,4,6,4,5,3,7,5,5,7,6,7,5]
+        var art = [10,2,8,4,5,8,4,1,6,1,9,3,5,4,7,2,10,7,3,7,7,3,6,6,3,10,5,6,4,8,4,5,4,2,8,4,8,4,7,3,8,1,3]
+        var ui = [8,8,9,6,5,8,8,5,8,8,8,7,6,6,2,7,8,8,6,8,7,8,4,8,7,10,7,8,5,6,8,6,9,6,8,3,8,8,8,8,9,6,8]
+        var code = [5,4,7,5,3,5,7,5,8,8,8,6,6,4,2,6,5,7,5,7,3,3,3,5,6,8,4,8,4,5,8,5,8,3,7,3,6,6,5,6,8,7,6]
+        var graph = [5,3,2,4,2,1,4,7,8,3,7,3,1,1,8,2,1,4,4,1,2,3,4,1,6,5,4,3,3,7,6,4,4,1,5,2,6,2,6,5,9,3,3]
+        var hci = [6,4,3,5,3,3,6,5,7,5,9,7,3,1,2,3,8,7,7,1,4,2,1,5,5,10,4,8,5,3,8,3,7,3,5,4,7,5,3,3,8,3,3]
+        var eval = [4,3,6,5,3,10,6,5,5,4,6,7,3,1,2,3,8,8,4,2,2,1,1,5,2,5,3,5,6,2,4,3,4,2,6,4,7,5,2,5,7,7,5]
+        var comm = [1,6,4,5,8,10,9,9,8,9,9,7,7,8,7,6,8,9,10,7,8,8,7,9,6,6,10,9,8,6,7,4,8,3,6,10,6,6,4,8,9,8,6]
+        var collab = [1,8,6,7,8,10,8,9,8,9,10,7,7,7,8,6,8,9,10,7,2,9,6,9,7,3,10,10,8,5,4,5,7,5,8,7,8,9,5,9,8,9,7]
+        var GIT = [5,8,10,4,3,8,7,5,7,9,7,6,7,2,5,7,4,7,8,10,2,6,2,7,2,5,3,8,7,7,8,5,7,7,9,3,8,8,3,5,6,6,4]
+
+    </script>
+
+
+
+
+</head>
+<body>
+
+
+    <!-- Simple header with scrollable tabs. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">Finding the best group!</span>
+        </div>
+        <!-- Tabs -->
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+            <a href="#scroll-tab-1" class="mdl-layout__tab is-active">All skills</a>
+            <a href="#scroll-tab-2" class="mdl-layout__tab">viz</a>
+            <a href="#scroll-tab-3" class="mdl-layout__tab">stats</a>
+            <a href="#scroll-tab-4" class="mdl-layout__tab">math</a>
+            <a href="#scroll-tab-5" class="mdl-layout__tab">art</a>
+            <a href="#scroll-tab-6" class="mdl-layout__tab">ui</a>
+            <a href="#scroll-tab-7" class="mdl-layout__tab">code</a>
+            <a href="#scroll-tab-8" class="mdl-layout__tab">graph</a>
+            <a href="#scroll-tab-9" class="mdl-layout__tab">hci</a>
+            <a href="#scroll-tab-10" class="mdl-layout__tab">eval</a>
+            <a href="#scroll-tab-11" class="mdl-layout__tab">comm</a>
+            <a href="#scroll-tab-12" class="mdl-layout__tab">collab</a>
+            <a href="#scroll-tab-13" class="mdl-layout__tab">GIT</a>
+        </div>
+    </header>
+
+    <main class="mdl-layout__content">
+        <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <!-- <img src="Overview.png" alt="Beschreibung des Bildes"> -->
+
+                <canvas id="myChart"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [
+                                {label: 'viz', data: viz, backgroundColor: 'rgba(255, 0, 0, 0.8)'},
+                                {label: 'stats', data: stats, backgroundColor: 'rgba(255, 132, 0, 0.8)'},
+                                {label: 'math', data: math, backgroundColor: 'rgba(255, 255, 0, 0.8)'},
+                                {label: 'art', data: art, backgroundColor: 'rgba(128, 255, 0, 0.8)'},
+                                {label: 'ui', data: ui, backgroundColor: 'rgba(0, 153, 0, 0.8)'},
+                                {label: 'code', data: code, backgroundColor: 'rgba(51, 255, 153, 0.8)'},
+                                {label: 'graph', data: graph, backgroundColor: 'rgba(0, 255, 255, 0.8)'},
+                                {label: 'hci', data: hci, backgroundColor: 'rgba(0, 76, 153, 0.8)'},
+                                {label: 'eval', data: eval, backgroundColor: 'rgba(51, 51, 255, 0.8)'},
+                                {label: 'comm', data: comm, backgroundColor: 'rgba(76, 0, 153, 0.8)'},
+                                {label: 'collab', data: collab, backgroundColor: 'rgba(255, 153, 255, 0.8)'},
+                                {label: 'GIT', data: GIT, backgroundColor: 'rgba(255, 0, 127, 0.8)'},
+                            ]
+                        },
+                        options: {
+                            scales: {x: { stacked: true }, y: { stacked: true }},
+                            plugins: {
+                                title: {display: true, text: 'Overview', font: {size: 24}},
+                                legend: {position: 'right', reverse: true}
+                            }
+                        } 
+                    });
+                </script>
+
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart2"></canvas>
+                <script>
+                    var ctx = document.getElementById('myChart2').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'viz', data: viz, backgroundColor: 'rgba(255, 0, 0, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'Information Visualization skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart3"></canvas>
+                <script>
+                    var ctx = document.getElementById('myChart3').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'stats', data: stats, backgroundColor: 'rgba(255, 132, 0, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'statistical skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart4"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart4').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'math', data: math, backgroundColor: 'rgba(255, 255, 0, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'mathematics skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-5">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart5"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart5').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'art', data: art, backgroundColor: 'rgba(128, 255, 0, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'drawing and artistic skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-6">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart6"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart6').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'ui', data: ui, backgroundColor: 'rgba(0, 153, 0, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'computer usage skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-7">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart7"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart7').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'code', data: code, backgroundColor: 'rgba(51, 255, 153, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'programming skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-8">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart8"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart8').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'graph', data: graph, backgroundColor: 'rgba(0, 255, 255, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'computer graphics programming skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-9">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart9"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart9').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'hci', data: hci, backgroundColor: 'rgba(0, 76, 153, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'human-computer interaction programming skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-10">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart10"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart10').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'eval', data: eval, backgroundColor: 'rgba(51, 51, 255, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'user experience evaluation skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-11">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart11"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart11').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'comm', data: comm, backgroundColor: 'rgba(76, 0, 153, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'communication skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-12">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart12"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart12').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'collab', data: collab, backgroundColor: 'rgba(255, 153, 255, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'collaboration skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-13">
+            <div class="page-content" style="margin: 0 auto; width: 1500px; height: 700px;">
+                <canvas id="myChart13"></canvas>
+
+                <script>
+                    var ctx = document.getElementById('myChart13').getContext('2d');
+                    
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: alias,
+                            datasets: [{label: 'GIT', data: GIT, backgroundColor: 'rgba(255, 0, 127, 0.8)'}]
+                        },
+                        options: {
+                            scales: {y: {min: 0, max: 10}},
+                            plugins: {
+                                title: {display: true, text: 'code repository skills', font: {size: 24}},
+                                legend: {display: false}
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </section>
+    </main>
+  </div>
+</body>
+</html>
